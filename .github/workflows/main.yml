@@ -1,0 +1,36 @@
+name: Simple Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Create project files
+      run: |
+        # Create a new console app
+        dotnet new console -n CyberSecurityAwarenessBot
+        cd CyberSecurityAwarenessBot
+        
+        # Build it
+        dotnet build --configuration Release
+        
+        echo "✅ Build successful"
+    
+    - name: Upload result
+      uses: actions/upload-artifact@v4
+      with:
+        name: built-app
+        path: CyberSecurityAwarenessBot/bin/Release/
